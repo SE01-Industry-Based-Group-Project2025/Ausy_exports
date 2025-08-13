@@ -31,6 +31,16 @@ public class Transportation {
     @Column(columnDefinition = "TEXT")
     private String maintenanceDetails;
 
+    private String driverName;
+    
+    private String driverContact;
+    
+    private Double capacity;
+    
+    private String description;
+    
+    private Boolean isActive = true;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
@@ -78,6 +88,46 @@ public class Transportation {
 
     public void setMaintenanceDetails(String maintenanceDetails) {
         this.maintenanceDetails = maintenanceDetails;
+    }
+
+    public String getDriverName() {
+        return driverName;
+    }
+
+    public void setDriverName(String driverName) {
+        this.driverName = driverName;
+    }
+
+    public String getDriverContact() {
+        return driverContact;
+    }
+
+    public void setDriverContact(String driverContact) {
+        this.driverContact = driverContact;
+    }
+
+    public Double getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(Double capacity) {
+        this.capacity = capacity;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
     public LocalDateTime getCreatedAt() {

@@ -26,6 +26,32 @@ public class Supply {
     @NotBlank
     private String materialType;
 
+    @NotBlank
+    private String itemName;
+    
+    @NotBlank
+    private String supplierName;
+    
+    private String supplierContact;
+    
+    private String category;
+    
+    private String status;
+    
+    private String description;
+    
+    private String unit;
+    
+    private Double unitPrice;
+    
+    private Double totalCost;
+    
+    private Integer minimumQuantity;
+    
+    private LocalDateTime requestDate;
+    
+    private LocalDateTime deliveryDate;
+
     @NotNull
     private Integer quantity;
 
@@ -42,6 +68,10 @@ public class Supply {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplier_id")
     private User supplier;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "branch_id")
+    private Branch branch;
 
     // Constructors
     public Supply() {
@@ -64,6 +94,102 @@ public class Supply {
 
     public void setMaterialType(String materialType) {
         this.materialType = materialType;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
+
+    public String getSupplierContact() {
+        return supplierContact;
+    }
+
+    public void setSupplierContact(String supplierContact) {
+        this.supplierContact = supplierContact;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public Double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(Double unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public Double getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(Double totalCost) {
+        this.totalCost = totalCost;
+    }
+
+    public Integer getMinimumQuantity() {
+        return minimumQuantity;
+    }
+
+    public void setMinimumQuantity(Integer minimumQuantity) {
+        this.minimumQuantity = minimumQuantity;
+    }
+
+    public LocalDateTime getRequestDate() {
+        return requestDate;
+    }
+
+    public void setRequestDate(LocalDateTime requestDate) {
+        this.requestDate = requestDate;
+    }
+
+    public LocalDateTime getDeliveryDate() {
+        return deliveryDate;
+    }
+
+    public void setDeliveryDate(LocalDateTime deliveryDate) {
+        this.deliveryDate = deliveryDate;
     }
 
     public Integer getQuantity() {
@@ -104,6 +230,14 @@ public class Supply {
 
     public void setSupplier(User supplier) {
         this.supplier = supplier;
+    }
+
+    public Branch getBranch() {
+        return branch;
+    }
+
+    public void setBranch(Branch branch) {
+        this.branch = branch;
     }
 
     @PreUpdate
