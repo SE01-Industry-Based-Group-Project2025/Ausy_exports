@@ -15,6 +15,10 @@ import UserManagement from '../components/UserManagement';
 import BranchManagement from '../components/BranchManagement';
 import StockManagement from '../components/StockManagement';
 import DepartmentManagement from '../components/DepartmentManagement';
+import TransportationManagement from '../components/TransportationManagement';
+import SupplyManagement from '../components/SupplyManagement';
+import OrderManagement from '../components/OrderManagement';
+import AgreementManagement from '../components/AgreementManagement';
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -65,6 +69,8 @@ const Dashboard = () => {
           <>
             <Route path="/users" element={<UserManagement />} />
             <Route path="/branches" element={<BranchManagement />} />
+            <Route path="/orders" element={<OrderManagement />} />
+            <Route path="/agreements" element={<AgreementManagement />} />
           </>
         )}
         
@@ -73,6 +79,9 @@ const Dashboard = () => {
           <>
             <Route path="/stock" element={<StockManagement />} />
             <Route path="/departments" element={<DepartmentManagement />} />
+            <Route path="/transportation" element={<TransportationManagement />} />
+            <Route path="/supplies" element={<SupplyManagement />} />
+            <Route path="/orders" element={<OrderManagement />} />
           </>
         )}
         

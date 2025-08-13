@@ -46,11 +46,15 @@ const UserManagement = () => {
 
   // Load data on component mount
   useEffect(() => {
-    // Only load data if we're not just adding a user
-    if (!location.pathname.includes('/add-user')) {
+    // Set loading to false immediately if we're adding a user
+    if (location.pathname.includes('/add-user')) {
+      setLoading(false);
+      loadBranches();
+    } else {
+      // Only load users data if we're not just adding a user
       loadUsers();
+      loadBranches();
     }
-    loadBranches();
   }, [location.pathname]);
 
   const loadUsers = async () => {
@@ -254,7 +258,7 @@ const UserManagement = () => {
     setShowModal(true);
   };
 
-  if (loading) {
+  if (loading && !location.pathname.includes('/add-user')) {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>

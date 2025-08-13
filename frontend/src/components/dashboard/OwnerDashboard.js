@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const OwnerDashboard = () => {
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     totalBranches: 0,
     totalEmployees: 0,
-    pendingActivations: 0,
-    activeOrders: 0,
+    totalOrders: 0,
+    activeAgreements: 0,
   });
 
   useEffect(() => {
     setStats({
       totalBranches: 8,
       totalEmployees: 234,
-      pendingActivations: 12,
-      activeOrders: 45,
+      totalOrders: 156,
+      activeAgreements: 23,
     });
   }, []);
 
@@ -57,11 +59,11 @@ const OwnerDashboard = () => {
         <div className="card">
           <div className="flex items-center">
             <div className="p-3 rounded-full bg-yellow-100 dark:bg-yellow-900">
-              <span className="text-2xl">⏳</span>
+              <span className="text-2xl">📦</span>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Pending Activations</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.pendingActivations}</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Orders</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalOrders}</p>
             </div>
           </div>
         </div>
@@ -72,21 +74,80 @@ const OwnerDashboard = () => {
               <span className="text-2xl">📋</span>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Active Orders</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.activeOrders}</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Active Agreements</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.activeAgreements}</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Quick Actions */}
+      {/* Owner Management Tools */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="card">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            Management Tools
+            Business Management
           </h3>
           <div className="space-y-3">
-            <button className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+            <button 
+              onClick={() => navigate('/dashboard/orders')}
+              className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+            >
+              <div className="flex items-center">
+                <span className="text-xl mr-3">�</span>
+                <div>
+                  <p className="font-medium text-gray-900 dark:text-white">Manage Orders</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">View and manage all customer orders</p>
+                </div>
+              </div>
+            </button>
+            <button 
+              onClick={() => navigate('/dashboard/agreements')}
+              className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+            >
+              <div className="flex items-center">
+                <span className="text-xl mr-3">📋</span>
+                <div>
+                  <p className="font-medium text-gray-900 dark:text-white">Manage Agreements</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Handle business agreements and contracts</p>
+                </div>
+              </div>
+            </button>
+            <button 
+              onClick={() => navigate('/dashboard/commands')}
+              className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+            >
+              <div className="flex items-center">
+                <span className="text-xl mr-3">📢</span>
+                <div>
+                  <p className="font-medium text-gray-900 dark:text-white">Give Commands</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Send instructions to managers and branches</p>
+                </div>
+              </div>
+            </button>
+            <button 
+              onClick={() => navigate('/dashboard/reports')}
+              className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+            >
+              <div className="flex items-center">
+                <span className="text-xl mr-3">📊</span>
+                <div>
+                  <p className="font-medium text-gray-900 dark:text-white">View Reports</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Access business analytics and reports</p>
+                </div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <div className="card">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            System Management
+          </h3>
+          <div className="space-y-3">
+            <button 
+              onClick={() => navigate('/dashboard/users')}
+              className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+            >
               <div className="flex items-center">
                 <span className="text-xl mr-3">👥</span>
                 <div>
@@ -95,7 +156,10 @@ const OwnerDashboard = () => {
                 </div>
               </div>
             </button>
-            <button className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+            <button 
+              onClick={() => navigate('/dashboard/branches')}
+              className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+            >
               <div className="flex items-center">
                 <span className="text-xl mr-3">🏢</span>
                 <div>
@@ -104,44 +168,6 @@ const OwnerDashboard = () => {
                 </div>
               </div>
             </button>
-            <button className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-              <div className="flex items-center">
-                <span className="text-xl mr-3">✅</span>
-                <div>
-                  <p className="font-medium text-gray-900 dark:text-white">Activate Accounts</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Approve pending user registrations</p>
-                </div>
-              </div>
-            </button>
-          </div>
-        </div>
-
-        <div className="card">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            Recent Commands
-          </h3>
-          <div className="space-y-3">
-            <div className="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-              <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
-              <div className="flex-1">
-                <p className="text-sm text-gray-900 dark:text-white">Increase production targets - Branch A</p>
-                <p className="text-xs text-gray-600 dark:text-gray-400">Sent to Manager John</p>
-              </div>
-            </div>
-            <div className="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-              <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-              <div className="flex-1">
-                <p className="text-sm text-gray-900 dark:text-white">Quality check requirements - Branch B</p>
-                <p className="text-xs text-gray-600 dark:text-gray-400">Sent to Manager Sarah</p>
-              </div>
-            </div>
-            <div className="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-              <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
-              <div className="flex-1">
-                <p className="text-sm text-gray-900 dark:text-white">Stock inventory update - All Branches</p>
-                <p className="text-xs text-gray-600 dark:text-gray-400">Broadcast message</p>
-              </div>
-            </div>
           </div>
         </div>
       </div>

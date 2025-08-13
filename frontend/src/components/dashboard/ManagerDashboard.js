@@ -138,7 +138,10 @@ const ManagerDashboard = () => {
                 </div>
               </div>
             </button>
-            <button className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+            <button 
+              onClick={() => navigate('/dashboard/transportation')}
+              className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+            >
               <div className="flex items-center">
                 <span className="text-xl mr-3">🚛</span>
                 <div>
@@ -147,7 +150,10 @@ const ManagerDashboard = () => {
                 </div>
               </div>
             </button>
-            <button className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+            <button 
+              onClick={() => navigate('/dashboard/supplies')}
+              className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+            >
               <div className="flex items-center">
                 <span className="text-xl mr-3">📋</span>
                 <div>
