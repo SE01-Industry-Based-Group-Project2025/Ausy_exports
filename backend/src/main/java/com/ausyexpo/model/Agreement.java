@@ -75,10 +75,6 @@ public class Agreement {
     @JoinColumn(name = "branch_id")
     private Branch branch;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "assigned_manager_id")
-    private User assignedManager;
-
     // Constructors
     public Agreement() {
         this.createdAt = LocalDateTime.now();
@@ -252,14 +248,6 @@ public class Agreement {
 
     public void setBranch(Branch branch) {
         this.branch = branch;
-    }
-
-    public User getAssignedManager() {
-        return assignedManager;
-    }
-
-    public void setAssignedManager(User assignedManager) {
-        this.assignedManager = assignedManager;
     }
 
     @PreUpdate

@@ -21,8 +21,6 @@ public interface AgreementRepository extends JpaRepository<Agreement, Long> {
     
     List<Agreement> findByIsActiveOrderByCreatedAtDesc(Boolean isActive);
     
-    List<Agreement> findByAssignedManagerIdOrderByCreatedAtDesc(Long managerId);
-    
     List<Agreement> findByBranchIdAndStatusOrderByCreatedAtDesc(Long branchId, String status);
     
     List<Agreement> findByBranchIdAndAgreementTypeOrderByCreatedAtDesc(Long branchId, String agreementType);

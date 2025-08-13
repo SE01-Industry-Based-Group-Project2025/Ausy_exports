@@ -51,16 +51,6 @@ public class AgreementService {
             }
         }
         
-        // Set assigned manager if provided
-        if (agreement.getAssignedManager() != null && agreement.getAssignedManager().getId() != null) {
-            Optional<User> manager = userRepository.findById(agreement.getAssignedManager().getId());
-            if (manager.isPresent()) {
-                agreement.setAssignedManager(manager.get());
-            } else {
-                throw new RuntimeException("Manager not found with id: " + agreement.getAssignedManager().getId());
-            }
-        }
-        
         // Calculate duration in months if dates are provided
         if (agreement.getStartDate() != null && agreement.getEndDate() != null) {
             long months = java.time.temporal.ChronoUnit.MONTHS.between(
@@ -115,16 +105,6 @@ public class AgreementService {
                 }
             }
             
-            // Update assigned manager if provided
-            if (agreementDetails.getAssignedManager() != null && agreementDetails.getAssignedManager().getId() != null) {
-                Optional<User> manager = userRepository.findById(agreementDetails.getAssignedManager().getId());
-                if (manager.isPresent()) {
-                    agreement.setAssignedManager(manager.get());
-                } else {
-                    throw new RuntimeException("Manager not found with id: " + agreementDetails.getAssignedManager().getId());
-                }
-            }
-            
             // Recalculate duration if dates changed
             if (agreement.getStartDate() != null && agreement.getEndDate() != null) {
                 long months = java.time.temporal.ChronoUnit.MONTHS.between(
@@ -164,10 +144,6 @@ public class AgreementService {
 
     public List<Agreement> getActiveAgreements() {
         return agreementRepository.findByIsActiveOrderByCreatedAtDesc(true);
-    }
-
-    public List<Agreement> getAgreementsByManager(Long managerId) {
-        return agreementRepository.findByAssignedManagerIdOrderByCreatedAtDesc(managerId);
     }
 
     public List<Agreement> getExpiringAgreements(int daysAhead) {
