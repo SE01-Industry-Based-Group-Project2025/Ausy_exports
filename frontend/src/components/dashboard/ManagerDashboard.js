@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ManagerDashboard = () => {
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     totalEmployees: 0,
     departments: 0,
@@ -104,7 +106,10 @@ const ManagerDashboard = () => {
                 </div>
               </div>
             </button>
-            <button className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+            <button 
+              onClick={() => navigate('/dashboard/departments')}
+              className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+            >
               <div className="flex items-center">
                 <span className="text-xl mr-3">🏛️</span>
                 <div>
@@ -121,7 +126,10 @@ const ManagerDashboard = () => {
             Operations Management
           </h3>
           <div className="space-y-3">
-            <button className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+            <button 
+              onClick={() => navigate('/dashboard/stock')}
+              className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+            >
               <div className="flex items-center">
                 <span className="text-xl mr-3">📦</span>
                 <div>

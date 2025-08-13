@@ -1,58 +1,43 @@
 package com.ausyexpo.entity;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "branches")
+// @Entity - Removed to avoid conflict with com.ausyexpo.model.Branch
+// This class appears to be unused in favor of com.ausyexpo.model.Branch
+// @Table(name = "branches")
 public class Branch {
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(nullable = false)
     private String name;
     
-    @Column(nullable = false, columnDefinition = "TEXT")
     private String address;
     
     // For backward compatibility with existing code
-    @Column(nullable = true)
     private String location;
     
-    @Column(nullable = false)
     private String phone;
     
     // For backward compatibility
-    @Column(nullable = true)
     private String contactDetails;
     
-    @Column(nullable = false)
     private String email;
     
-    @Column(nullable = false)
     private String manager;
     
-    @Column(columnDefinition = "TEXT")
     private String description;
     
-    @Column(nullable = false)
     private Boolean isActive = true;
     
-    @Column(name = "created_at")
     private LocalDateTime createdAt;
     
-    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
     
-    @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
     }
     
-    @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
