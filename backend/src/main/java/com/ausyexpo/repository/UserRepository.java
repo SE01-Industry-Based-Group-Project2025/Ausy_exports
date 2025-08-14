@@ -24,4 +24,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByBranchId(Long branchId);
     
     boolean existsByEmail(String email);
+    
+    // Report queries
+    @Query("SELECT u.role, COUNT(u) FROM User u GROUP BY u.role")
+    List<Object[]> countUsersByRole();
+    
+    @Query("SELECT u FROM User u ORDER BY u.createdAt DESC")
+    List<User> findTop5ByOrderByCreatedAtDesc();
 }

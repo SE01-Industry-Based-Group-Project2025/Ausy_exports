@@ -16,7 +16,6 @@ const TransportationManagement = () => {
         capacity: '',
         description: '',
         maintenanceDetails: '',
-        branchId: '',
         isActive: true
     });
     const [searchTerm, setSearchTerm] = useState('');
@@ -86,7 +85,6 @@ const TransportationManagement = () => {
             capacity: '',
             description: '',
             maintenanceDetails: '',
-            branchId: '',
             isActive: true
         });
         setIsEditing(false);
@@ -109,11 +107,6 @@ const TransportationManagement = () => {
             toast.error('Driver name is required');
             return;
         }
-        
-        if (!currentVehicle.branchId) {
-            toast.error('Branch selection is required');
-            return;
-        }
 
         try {
             const vehicleData = {
@@ -124,7 +117,6 @@ const TransportationManagement = () => {
                 capacity: currentVehicle.capacity ? parseFloat(currentVehicle.capacity) : null,
                 description: currentVehicle.description.trim(),
                 maintenanceDetails: currentVehicle.maintenanceDetails.trim(),
-                branch: { id: parseInt(currentVehicle.branchId) },
                 isActive: currentVehicle.isActive
             };
 
@@ -160,7 +152,6 @@ const TransportationManagement = () => {
             capacity: vehicle.capacity || '',
             description: vehicle.description || '',
             maintenanceDetails: vehicle.maintenanceDetails || '',
-            branchId: vehicle.branch?.id || '',
             isActive: vehicle.isActive !== undefined ? vehicle.isActive : true
         });
         setIsEditing(true);
@@ -248,7 +239,7 @@ const TransportationManagement = () => {
                 </div>
 
                 {/* Search and Filter Section */}
-                <div className="mb-6 grid grid-cols-1 md:grid-cols-6 gap-4">
+                <div className="mb-6 grid grid-cols-1 md:grid-cols-5 gap-4">
                     <input
                         type="text"
                         placeholder="Search by driver name..."
@@ -256,16 +247,6 @@ const TransportationManagement = () => {
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                     />
-                    <select
-                        value={selectedBranch}
-                        onChange={(e) => setSelectedBranch(e.target.value)}
-                        className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-                    >
-                        <option value="">All Branches</option>
-                        {branches.map(branch => (
-                            <option key={branch.id} value={branch.id}>{branch.name}</option>
-                        ))}
-                    </select>
                     <select
                         value={selectedVehicleType}
                         onChange={(e) => setSelectedVehicleType(e.target.value)}
@@ -432,22 +413,6 @@ const TransportationManagement = () => {
                                         onChange={(e) => setCurrentVehicle({...currentVehicle, driverContact: e.target.value})}
                                         className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                                     />
-                                </div>
-                                <div className="mb-4">
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Branch *
-                                    </label>
-                                    <select
-                                        value={currentVehicle.branchId}
-                                        onChange={(e) => setCurrentVehicle({...currentVehicle, branchId: e.target.value})}
-                                        className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-                                        required
-                                    >
-                                        <option value="">Select Branch</option>
-                                        {branches.map(branch => (
-                                            <option key={branch.id} value={branch.id}>{branch.name}</option>
-                                        ))}
-                                    </select>
                                 </div>
                                 <div className="mb-4">
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">

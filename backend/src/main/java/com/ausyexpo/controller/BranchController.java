@@ -30,7 +30,7 @@ public class BranchController {
     private BranchService branchService;
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN') or hasRole('HR')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('HR') or hasRole('MANAGER') or hasRole('OWNER')")
     public ResponseEntity<List<Branch>> getAllBranches() {
         try {
             List<Branch> branches = branchService.getAllBranches();

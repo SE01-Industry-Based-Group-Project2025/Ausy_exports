@@ -1,20 +1,50 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     totalUsers: 0,
     totalBranches: 0,
-    totalOrders: 0,
-    pendingOrders: 0,
+    totalEmployees: 0,
   });
+  const [loading, setLoading] = useState(true);
+
+  const fetchStats = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const headers = {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      };
+
+      // Fetch user count
+      const usersResponse = await fetch('http://localhost:8080/api/users', { headers });
+      const usersData = usersResponse.ok ? await usersResponse.json() : [];
+
+      // Fetch branch count
+      const branchesResponse = await fetch('http://localhost:8080/api/branches', { headers });
+      const branchesData = branchesResponse.ok ? await branchesResponse.json() : [];
+
+      // Fetch employee count
+      const employeesResponse = await fetch('http://localhost:8080/api/employees', { headers });
+      const employeesData = employeesResponse.ok ? await employeesResponse.json() : [];
+
+      setStats({
+        totalUsers: usersData.length || 0,
+        totalBranches: branchesData.length || 0,
+        totalEmployees: employeesData.length || 0,
+      });
+    } catch (error) {
+      console.error('Error fetching dashboard stats:', error);
+      // Keep default values on error
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    setStats({
-      totalUsers: 15,
-      totalBranches: 8,
-      totalOrders: 142,
-      pendingOrders: 23,
-    });
+    fetchStats();
   }, []);
 
   return (
@@ -29,7 +59,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <div className="card">
           <div className="flex items-center">
             <div className="p-3 rounded-full bg-blue-100 dark:bg-blue-900">
@@ -37,7 +67,9 @@ const AdminDashboard = () => {
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Users</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalUsers}</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                {loading ? '...' : stats.totalUsers}
+              </p>
             </div>
           </div>
         </div>
@@ -49,7 +81,9 @@ const AdminDashboard = () => {
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Branches</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalBranches}</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                {loading ? '...' : stats.totalBranches}
+              </p>
             </div>
           </div>
         </div>
@@ -57,23 +91,13 @@ const AdminDashboard = () => {
         <div className="card">
           <div className="flex items-center">
             <div className="p-3 rounded-full bg-purple-100 dark:bg-purple-900">
-              <span className="text-2xl">📦</span>
+              <span className="text-2xl">�</span>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Orders</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalOrders}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="card">
-          <div className="flex items-center">
-            <div className="p-3 rounded-full bg-yellow-100 dark:bg-yellow-900">
-              <span className="text-2xl">⏳</span>
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Pending Orders</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.pendingOrders}</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Employees</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                {loading ? '...' : stats.totalEmployees}
+              </p>
             </div>
           </div>
         </div>
@@ -86,7 +110,10 @@ const AdminDashboard = () => {
             User Management
           </h3>
           <div className="space-y-3">
-            <button className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+            <button 
+              onClick={() => navigate('/dashboard/add-user')} 
+              className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+            >
               <div className="flex items-center">
                 <span className="text-xl mr-3">👤</span>
                 <div>
@@ -95,7 +122,10 @@ const AdminDashboard = () => {
                 </div>
               </div>
             </button>
-            <button className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+            <button 
+              onClick={() => navigate('/dashboard/users')} 
+              className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+            >
               <div className="flex items-center">
                 <span className="text-xl mr-3">👥</span>
                 <div>
@@ -112,7 +142,10 @@ const AdminDashboard = () => {
             System Management
           </h3>
           <div className="space-y-3">
-            <button className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+            <button 
+              onClick={() => navigate('/dashboard/branches')} 
+              className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+            >
               <div className="flex items-center">
                 <span className="text-xl mr-3">🏢</span>
                 <div>
@@ -121,7 +154,10 @@ const AdminDashboard = () => {
                 </div>
               </div>
             </button>
-            <button className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+            <button 
+              onClick={() => navigate('/dashboard/reports')} 
+              className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+            >
               <div className="flex items-center">
                 <span className="text-xl mr-3">📈</span>
                 <div>

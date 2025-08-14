@@ -126,7 +126,6 @@ const OrderManagement = () => {
                 quantity: parseInt(formData.quantity),
                 unitPrice: parseFloat(formData.unitPrice),
                 totalAmount: parseFloat(formData.totalAmount),
-                branch: formData.branchId ? { id: parseInt(formData.branchId) } : null,
                 expectedDeliveryDate: formData.expectedDeliveryDate ? `${formData.expectedDeliveryDate}T00:00:00` : null
             };
 
@@ -388,18 +387,7 @@ const OrderManagement = () => {
             {showFilters && (
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6">
                     <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Filter Orders</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                        <select
-                            value={filters.branchId}
-                            onChange={(e) => setFilters(prev => ({ ...prev, branchId: e.target.value }))}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                        >
-                            <option value="">All Branches</option>
-                            {branches.map(branch => (
-                                <option key={branch.id} value={branch.id}>{branch.name}</option>
-                            ))}
-                        </select>
-
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <select
                             value={filters.status}
                             onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
@@ -620,37 +608,24 @@ const OrderManagement = () => {
                                     />
 
                                     <select
-                                        value={formData.branchId}
-                                        onChange={(e) => setFormData(prev => ({ ...prev, branchId: e.target.value }))}
+                                        value={formData.status}
+                                        onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
                                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     >
-                                        <option value="">Select Branch</option>
-                                        {branches.map(branch => (
-                                            <option key={branch.id} value={branch.id}>{branch.name}</option>
+                                        {statusOptions.map(status => (
+                                            <option key={status} value={status}>{status}</option>
                                         ))}
                                     </select>
 
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <select
-                                            value={formData.status}
-                                            onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                        >
-                                            {statusOptions.map(status => (
-                                                <option key={status} value={status}>{status}</option>
-                                            ))}
-                                        </select>
-
-                                        <select
-                                            value={formData.priority}
-                                            onChange={(e) => setFormData(prev => ({ ...prev, priority: e.target.value }))}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                        >
-                                            {priorityOptions.map(priority => (
-                                                <option key={priority} value={priority}>{priority}</option>
-                                            ))}
-                                        </select>
-                                    </div>
+                                    <select
+                                        value={formData.priority}
+                                        onChange={(e) => setFormData(prev => ({ ...prev, priority: e.target.value }))}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                    >
+                                        {priorityOptions.map(priority => (
+                                            <option key={priority} value={priority}>{priority}</option>
+                                        ))}
+                                    </select>
 
                                     <input
                                         type="date"

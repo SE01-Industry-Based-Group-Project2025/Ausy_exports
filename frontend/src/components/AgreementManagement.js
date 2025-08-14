@@ -92,7 +92,6 @@ const AgreementManagement = () => {
   const fetchBranches = async () => {
     try {
       const token = localStorage.getItem('token');
-      const currentUser = JSON.parse(localStorage.getItem('user'));
       
       const response = await fetch('http://localhost:8080/api/branches', {
         headers: {
@@ -103,24 +102,7 @@ const AgreementManagement = () => {
 
       if (response.ok) {
         const data = await response.json();
-        
-        // Filter branches based on user role
-        let filteredBranches = data;
-        if (currentUser?.role === 'ADMIN') {
-          // For admin, show branches they created (assuming we have a createdBy field)
-          // If no createdBy field, show all branches for admin
-          filteredBranches = data;
-        } else if (currentUser?.role === 'OWNER') {
-          // For owner, show all branches
-          filteredBranches = data;
-        } else {
-          // For other roles, show only their assigned branch
-          filteredBranches = data.filter(branch => 
-            currentUser?.branchId === branch.id
-          );
-        }
-        
-        setBranches(filteredBranches);
+        setBranches(data);
       }
     } catch (error) {
       console.error('Error fetching branches:', error);
@@ -134,8 +116,7 @@ const AgreementManagement = () => {
       const token = localStorage.getItem('token');
       const agreementData = {
         ...formData,
-        contractValue: parseFloat(formData.contractValue),
-        branch: formData.branch.id ? { id: parseInt(formData.branch.id) } : null
+        contractValue: parseFloat(formData.contractValue)
       };
 
       const url = modalMode === 'add' 
@@ -384,19 +365,6 @@ const AgreementManagement = () => {
               <option value="">All Types</option>
               {agreementTypes.map(type => (
                 <option key={type} value={type}>{type}</option>
-              ))}
-            </select>
-
-            <select
-              value={filterBranch}
-              onChange={(e) => setFilterBranch(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">All Branches</option>
-              {branches.map(branch => (
-                <option key={branch.id} value={branch.id}>
-                  {branch.name}
-                </option>
               ))}
             </select>
 
@@ -704,23 +672,6 @@ const AgreementManagement = () => {
                     >
                       {priorityOptions.map(priority => (
                         <option key={priority} value={priority}>{priority}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Branch</label>
-                    <select
-                      name="branch.id"
-                      value={formData.branch.id}
-                      onChange={handleInputChange}
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="">Select Branch</option>
-                      {branches.map(branch => (
-                        <option key={branch.id} value={branch.id}>
-                          {branch.name}
-                        </option>
                       ))}
                     </select>
                   </div>

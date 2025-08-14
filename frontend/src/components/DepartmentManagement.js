@@ -11,7 +11,6 @@ const DepartmentManagement = () => {
         id: '',
         name: '',
         description: '',
-        branchId: '',
         budget: ''
     });
     const [searchTerm, setSearchTerm] = useState('');
@@ -44,10 +43,33 @@ const DepartmentManagement = () => {
     const fetchDepartments = async () => {
         try {
             setLoading(true);
-            const data = await apiCall('/departments');
-            setDepartments(data);
+            const token = localStorage.getItem('token');
+            console.log('Fetching departments with token:', token ? 'Token exists' : 'No token');
+            
+            const response = await fetch('http://localhost:8080/api/departments', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log('Response status:', response.status);
+            console.log('Response ok:', response.ok);
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Departments data received:', data);
+                setDepartments(data);
+            } else {
+                const errorText = await response.text();
+                console.error('Response error:', errorText);
+                toast.error('Failed to load departments: ' + response.status);
+                setDepartments([]);
+            }
         } catch (error) {
-            toast.error('Failed to fetch departments: ' + error.message);
+            console.error('Error loading departments:', error);
+            toast.error('Failed to load departments');
+            setDepartments([]);
         } finally {
             setLoading(false);
         }
@@ -55,10 +77,25 @@ const DepartmentManagement = () => {
 
     const fetchBranches = async () => {
         try {
-            const data = await apiCall('/branches');
-            setBranches(data);
+            const token = localStorage.getItem('token');
+            const response = await fetch('http://localhost:8080/api/branches', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setBranches(data);
+            } else {
+                toast.error('Failed to load branches');
+                setBranches([]);
+            }
         } catch (error) {
-            toast.error('Failed to fetch branches: ' + error.message);
+            console.error('Error loading branches:', error);
+            toast.error('Failed to load branches');
+            setBranches([]);
         }
     };
 
@@ -85,17 +122,11 @@ const DepartmentManagement = () => {
             toast.error('Department name is required');
             return;
         }
-        
-        if (!currentDepartment.branchId) {
-            toast.error('Branch selection is required');
-            return;
-        }
 
         try {
             const departmentData = {
                 name: currentDepartment.name.trim(),
                 description: currentDepartment.description.trim(),
-                branch: { id: parseInt(currentDepartment.branchId) },
                 budget: currentDepartment.budget ? parseFloat(currentDepartment.budget) : 0
             };
 
@@ -324,22 +355,6 @@ const DepartmentManagement = () => {
                                     className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                                     rows="3"
                                 />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                    Branch *
-                                </label>
-                                <select
-                                    value={currentDepartment.branchId}
-                                    onChange={(e) => setCurrentDepartment({...currentDepartment, branchId: e.target.value})}
-                                    className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-                                    required
-                                >
-                                    <option value="">Select Branch</option>
-                                    {branches.map(branch => (
-                                        <option key={branch.id} value={branch.id}>{branch.name}</option>
-                                    ))}
-                                </select>
                             </div>
                             <div className="mb-6">
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
