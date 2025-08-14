@@ -54,23 +54,13 @@ public class TransportationService {
             throw new RuntimeException("Driver name is required");
         }
 
-        // Validate branch exists
-        if (transportation.getBranch() == null || transportation.getBranch().getId() == null) {
-            throw new RuntimeException("Branch is required");
-        }
-
-        Optional<Branch> branch = branchRepository.findById(transportation.getBranch().getId());
-        if (!branch.isPresent()) {
-            throw new RuntimeException("Branch not found with id: " + transportation.getBranch().getId());
-        }
-
         // Check if vehicle number already exists
         if (transportationRepository.existsByVehicleNumber(transportation.getVehicleNumber().trim())) {
             throw new RuntimeException("Vehicle with number '" + transportation.getVehicleNumber().trim() + "' already exists");
         }
 
-        // Set the branch
-        transportation.setBranch(branch.get());
+        // Set branch to null since we removed branch selection from frontend
+        transportation.setBranch(null);
         
         // Set default values
         if (transportation.getIsActive() == null) {
@@ -119,16 +109,6 @@ public class TransportationService {
             throw new RuntimeException("Driver name is required");
         }
 
-        // Validate branch exists
-        if (transportationDetails.getBranch() == null || transportationDetails.getBranch().getId() == null) {
-            throw new RuntimeException("Branch is required");
-        }
-
-        Optional<Branch> branch = branchRepository.findById(transportationDetails.getBranch().getId());
-        if (!branch.isPresent()) {
-            throw new RuntimeException("Branch not found with id: " + transportationDetails.getBranch().getId());
-        }
-
         // Check if vehicle number already exists (excluding current record)
         if (transportationRepository.existsByVehicleNumberAndIdNot(transportationDetails.getVehicleNumber().trim(), id)) {
             throw new RuntimeException("Vehicle with number '" + transportationDetails.getVehicleNumber().trim() + "' already exists");
@@ -138,7 +118,7 @@ public class TransportationService {
         transportation.setVehicleNumber(transportationDetails.getVehicleNumber().trim());
         transportation.setVehicleType(transportationDetails.getVehicleType().trim());
         transportation.setDriverName(transportationDetails.getDriverName().trim());
-        transportation.setBranch(branch.get());
+        transportation.setBranch(null); // Set branch to null since we removed branch selection from frontend
         
         if (transportationDetails.getDriverContact() != null) {
             transportation.setDriverContact(transportationDetails.getDriverContact().trim());

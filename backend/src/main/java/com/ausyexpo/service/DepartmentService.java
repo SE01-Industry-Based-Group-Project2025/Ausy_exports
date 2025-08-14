@@ -37,20 +37,8 @@ public class DepartmentService {
 
     public Department createDepartment(Department department) {
         // Validate branch exists
-        if (department.getBranch() != null && department.getBranch().getId() != null) {
-            Optional<Branch> branch = branchRepository.findById(department.getBranch().getId());
-            if (!branch.isPresent()) {
-                throw new RuntimeException("Branch not found with id: " + department.getBranch().getId());
-            }
-            department.setBranch(branch.get());
-        } else {
-            throw new RuntimeException("Branch is required");
-        }
-        
-        // Check if department name already exists in the same branch
-        if (departmentRepository.existsByNameAndBranchId(department.getName(), department.getBranch().getId())) {
-            throw new RuntimeException("Department with name '" + department.getName() + "' already exists in this branch");
-        }
+        // Set branch to null since we removed branch selection from frontend
+        department.setBranch(null);
         
         return departmentRepository.save(department);
     }
@@ -63,22 +51,8 @@ public class DepartmentService {
 
         Department department = optionalDepartment.get();
 
-        // Validate branch exists if provided
-        if (departmentDetails.getBranch() != null && departmentDetails.getBranch().getId() != null) {
-            Optional<Branch> branch = branchRepository.findById(departmentDetails.getBranch().getId());
-            if (!branch.isPresent()) {
-                throw new RuntimeException("Branch not found with id: " + departmentDetails.getBranch().getId());
-            }
-            
-            // Check if department name already exists in the target branch (excluding current department)
-            Optional<Department> existingDept = departmentRepository.findByNameAndBranchId(
-                departmentDetails.getName(), departmentDetails.getBranch().getId());
-            if (existingDept.isPresent() && !existingDept.get().getId().equals(id)) {
-                throw new RuntimeException("Department with name '" + departmentDetails.getName() + "' already exists in this branch");
-            }
-            
-            department.setBranch(branch.get());
-        }
+        // Set branch to null since we removed branch selection from frontend
+        department.setBranch(null);
 
         // Update fields
         department.setName(departmentDetails.getName());

@@ -4,7 +4,6 @@ import { toast } from 'react-hot-toast';
 const AgreementManagement = () => {
   const [agreements, setAgreements] = useState([]);
   const [branches, setBranches] = useState([]);
-  const [managers, setManagers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState('add');
@@ -34,8 +33,7 @@ const AgreementManagement = () => {
     isActive: true,
     documentPath: '',
     priority: 'Medium',
-    branch: { id: '' },
-    assignedManager: { id: '' }
+    branch: { id: '' }
   });
 
   const agreementTypes = [
@@ -65,7 +63,6 @@ const AgreementManagement = () => {
   useEffect(() => {
     fetchAgreements();
     fetchBranches();
-    fetchManagers();
   }, []);
 
   const fetchAgreements = async () => {
@@ -95,6 +92,7 @@ const AgreementManagement = () => {
   const fetchBranches = async () => {
     try {
       const token = localStorage.getItem('token');
+      
       const response = await fetch('http://localhost:8080/api/branches', {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -111,29 +109,6 @@ const AgreementManagement = () => {
     }
   };
 
-  const fetchManagers = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:8080/api/users', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        // Filter for managers and owners
-        const managerUsers = data.filter(user => 
-          user.role === 'MANAGER' || user.role === 'OWNER'
-        );
-        setManagers(managerUsers);
-      }
-    } catch (error) {
-      console.error('Error fetching managers:', error);
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -141,9 +116,7 @@ const AgreementManagement = () => {
       const token = localStorage.getItem('token');
       const agreementData = {
         ...formData,
-        contractValue: parseFloat(formData.contractValue),
-        branch: formData.branch.id ? { id: parseInt(formData.branch.id) } : null,
-        assignedManager: formData.assignedManager.id ? { id: parseInt(formData.assignedManager.id) } : null
+        contractValue: parseFloat(formData.contractValue)
       };
 
       const url = modalMode === 'add' 
@@ -195,8 +168,7 @@ const AgreementManagement = () => {
       isActive: agreement.isActive !== undefined ? agreement.isActive : true,
       documentPath: agreement.documentPath || '',
       priority: agreement.priority || 'Medium',
-      branch: { id: agreement.branch?.id?.toString() || '' },
-      assignedManager: { id: agreement.assignedManager?.id?.toString() || '' }
+      branch: { id: agreement.branch?.id?.toString() || '' }
     });
     setModalMode('edit');
     setShowModal(true);
@@ -244,8 +216,7 @@ const AgreementManagement = () => {
       isActive: true,
       documentPath: '',
       priority: 'Medium',
-      branch: { id: '' },
-      assignedManager: { id: '' }
+      branch: { id: '' }
     });
     setSelectedAgreement(null);
   };
@@ -394,19 +365,6 @@ const AgreementManagement = () => {
               <option value="">All Types</option>
               {agreementTypes.map(type => (
                 <option key={type} value={type}>{type}</option>
-              ))}
-            </select>
-
-            <select
-              value={filterBranch}
-              onChange={(e) => setFilterBranch(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">All Branches</option>
-              {branches.map(branch => (
-                <option key={branch.id} value={branch.id}>
-                  {branch.name}
-                </option>
               ))}
             </select>
 
@@ -714,40 +672,6 @@ const AgreementManagement = () => {
                     >
                       {priorityOptions.map(priority => (
                         <option key={priority} value={priority}>{priority}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Branch</label>
-                    <select
-                      name="branch.id"
-                      value={formData.branch.id}
-                      onChange={handleInputChange}
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="">Select Branch</option>
-                      {branches.map(branch => (
-                        <option key={branch.id} value={branch.id}>
-                          {branch.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Assigned Manager</label>
-                    <select
-                      name="assignedManager.id"
-                      value={formData.assignedManager.id}
-                      onChange={handleInputChange}
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="">Select Manager</option>
-                      {managers.map(manager => (
-                        <option key={manager.id} value={manager.id}>
-                          {manager.firstName} {manager.lastName} ({manager.role})
-                        </option>
                       ))}
                     </select>
                   </div>

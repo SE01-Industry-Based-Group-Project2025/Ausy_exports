@@ -19,6 +19,9 @@ import TransportationManagement from '../components/TransportationManagement';
 import SupplyManagement from '../components/SupplyManagement';
 import OrderManagement from '../components/OrderManagement';
 import AgreementManagement from '../components/AgreementManagement';
+import CommandManagement from '../components/CommandManagement';
+import EmployeeManagement from '../components/EmployeeManagement';
+import SystemReports from '../components/AdminReports';
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -61,6 +64,8 @@ const Dashboard = () => {
             <Route path="/add-user" element={<UserManagement />} />
             <Route path="/branches" element={<BranchManagement />} />
             <Route path="/users" element={<UserManagement />} />
+            <Route path="/commands" element={<CommandManagement />} />
+            <Route path="/reports" element={<SystemReports />} />
           </>
         )}
         
@@ -71,17 +76,22 @@ const Dashboard = () => {
             <Route path="/branches" element={<BranchManagement />} />
             <Route path="/orders" element={<OrderManagement />} />
             <Route path="/agreements" element={<AgreementManagement />} />
+            <Route path="/commands" element={<CommandManagement />} />
+            <Route path="/reports" element={<SystemReports />} />
           </>
         )}
         
         {/* Manager Routes */}
         {(user.role === 'MANAGER' || user.role === 'ADMIN' || user.role === 'OWNER') && (
           <>
+            <Route path="/employees" element={<EmployeeManagement />} />
             <Route path="/stock" element={<StockManagement />} />
             <Route path="/departments" element={<DepartmentManagement />} />
             <Route path="/transportation" element={<TransportationManagement />} />
             <Route path="/supplies" element={<SupplyManagement />} />
             <Route path="/orders" element={<OrderManagement />} />
+            <Route path="/commands" element={<CommandManagement />} />
+            <Route path="/reports" element={<SystemReports />} />
           </>
         )}
         

@@ -150,17 +150,6 @@ public class AgreementController {
         }
     }
 
-    @GetMapping("/manager/{managerId}")
-    @PreAuthorize("hasRole('OWNER') or hasRole('MANAGER') or hasRole('ADMIN')")
-    public ResponseEntity<List<Agreement>> getAgreementsByManager(@PathVariable Long managerId) {
-        try {
-            List<Agreement> agreements = agreementService.getAgreementsByManager(managerId);
-            return ResponseEntity.ok(agreements);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
     @GetMapping("/expiring")
     @PreAuthorize("hasRole('OWNER') or hasRole('MANAGER') or hasRole('ADMIN')")
     public ResponseEntity<List<Agreement>> getExpiringAgreements(

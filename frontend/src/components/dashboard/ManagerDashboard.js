@@ -9,14 +9,48 @@ const ManagerDashboard = () => {
     stockItems: 0,
     vehicles: 0,
   });
+  const [loading, setLoading] = useState(true);
+
+  const fetchStats = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const headers = {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      };
+
+      // Fetch employee count
+      const employeesResponse = await fetch('http://localhost:8080/api/employees', { headers });
+      const employeesData = employeesResponse.ok ? await employeesResponse.json() : [];
+
+      // Fetch department count
+      const departmentsResponse = await fetch('http://localhost:8080/api/departments', { headers });
+      const departmentsData = departmentsResponse.ok ? await departmentsResponse.json() : [];
+
+      // Fetch stock count
+      const stockResponse = await fetch('http://localhost:8080/api/stock', { headers });
+      const stockData = stockResponse.ok ? await stockResponse.json() : [];
+
+      // Fetch transportation/vehicles count
+      const transportationResponse = await fetch('http://localhost:8080/api/transportation', { headers });
+      const transportationData = transportationResponse.ok ? await transportationResponse.json() : [];
+
+      setStats({
+        totalEmployees: employeesData.length || 0,
+        departments: departmentsData.length || 0,
+        stockItems: stockData.length || 0,
+        vehicles: transportationData.length || 0,
+      });
+    } catch (error) {
+      console.error('Error fetching dashboard stats:', error);
+      // Keep default values on error
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    setStats({
-      totalEmployees: 45,
-      departments: 6,
-      stockItems: 1250,
-      vehicles: 12,
-    });
+    fetchStats();
   }, []);
 
   return (
@@ -39,7 +73,9 @@ const ManagerDashboard = () => {
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Employees</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalEmployees}</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                {loading ? '...' : stats.totalEmployees}
+              </p>
             </div>
           </div>
         </div>
@@ -51,7 +87,9 @@ const ManagerDashboard = () => {
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Departments</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.departments}</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                {loading ? '...' : stats.departments}
+              </p>
             </div>
           </div>
         </div>
@@ -63,7 +101,9 @@ const ManagerDashboard = () => {
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Stock Items</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.stockItems}</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                {loading ? '...' : stats.stockItems}
+              </p>
             </div>
           </div>
         </div>
@@ -75,7 +115,9 @@ const ManagerDashboard = () => {
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Vehicles</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.vehicles}</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                {loading ? '...' : stats.vehicles}
+              </p>
             </div>
           </div>
         </div>
@@ -88,7 +130,10 @@ const ManagerDashboard = () => {
             Staff Management
           </h3>
           <div className="space-y-3">
-            <button className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+            <button 
+              onClick={() => navigate('/dashboard/employees')}
+              className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+            >
               <div className="flex items-center">
                 <span className="text-xl mr-3">👷</span>
                 <div>
@@ -159,6 +204,18 @@ const ManagerDashboard = () => {
                 <div>
                   <p className="font-medium text-gray-900 dark:text-white">Manage Supply</p>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Handle supply chain operations</p>
+                </div>
+              </div>
+            </button>
+            <button 
+              onClick={() => navigate('/dashboard/reports')}
+              className="w-full text-left p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+            >
+              <div className="flex items-center">
+                <span className="text-xl mr-3">📈</span>
+                <div>
+                  <p className="font-medium text-gray-900 dark:text-white">View Reports</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Analytics and performance reports</p>
                 </div>
               </div>
             </button>

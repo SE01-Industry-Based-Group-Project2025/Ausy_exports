@@ -60,14 +60,8 @@ public class OrderService {
             throw new RuntimeException("Order number already exists: " + order.getOrderNumber());
         }
         
-        // Validate branch
-        if (order.getBranch() != null && order.getBranch().getId() != null) {
-            Optional<Branch> branch = branchRepository.findById(order.getBranch().getId());
-            if (!branch.isPresent()) {
-                throw new RuntimeException("Branch not found with id: " + order.getBranch().getId());
-            }
-            order.setBranch(branch.get());
-        }
+        // Set branch to null since we removed branch selection from frontend
+        order.setBranch(null);
         
         // Validate customer if provided
         if (order.getCustomer() != null && order.getCustomer().getId() != null) {
@@ -133,14 +127,8 @@ public class OrderService {
         order.setSpecifications(orderDetails.getSpecifications());
         order.setUpdatedAt(LocalDateTime.now());
 
-        // Update branch if provided
-        if (orderDetails.getBranch() != null && orderDetails.getBranch().getId() != null) {
-            Optional<Branch> branch = branchRepository.findById(orderDetails.getBranch().getId());
-            if (!branch.isPresent()) {
-                throw new RuntimeException("Branch not found with id: " + orderDetails.getBranch().getId());
-            }
-            order.setBranch(branch.get());
-        }
+        // Set branch to null since we removed branch selection from frontend
+        order.setBranch(null);
 
         // Update customer if provided
         if (orderDetails.getCustomer() != null && orderDetails.getCustomer().getId() != null) {

@@ -32,4 +32,8 @@ public interface BranchRepository extends JpaRepository<Branch, Long> {
            "LOWER(b.address) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
            "LOWER(b.manager) LIKE LOWER(CONCAT('%', :searchTerm, '%')))")
     List<Branch> findByIsActiveAndSearchTerm(@Param("isActive") Boolean isActive, @Param("searchTerm") String searchTerm);
+    
+    // Report queries
+    @Query("SELECT b.name, COUNT(e) FROM Branch b LEFT JOIN Employee e ON e.branch.id = b.id GROUP BY b.id, b.name")
+    List<Object[]> getBranchEmployeeCounts();
 }

@@ -41,25 +41,8 @@ public class AgreementService {
     public Agreement createAgreement(Agreement agreement) {
         validateAgreement(agreement);
         
-        // Set branch if provided
-        if (agreement.getBranch() != null && agreement.getBranch().getId() != null) {
-            Optional<Branch> branch = branchRepository.findById(agreement.getBranch().getId());
-            if (branch.isPresent()) {
-                agreement.setBranch(branch.get());
-            } else {
-                throw new RuntimeException("Branch not found with id: " + agreement.getBranch().getId());
-            }
-        }
-        
-        // Set assigned manager if provided
-        if (agreement.getAssignedManager() != null && agreement.getAssignedManager().getId() != null) {
-            Optional<User> manager = userRepository.findById(agreement.getAssignedManager().getId());
-            if (manager.isPresent()) {
-                agreement.setAssignedManager(manager.get());
-            } else {
-                throw new RuntimeException("Manager not found with id: " + agreement.getAssignedManager().getId());
-            }
-        }
+        // Set branch to null since we removed branch selection from frontend
+        agreement.setBranch(null);
         
         // Calculate duration in months if dates are provided
         if (agreement.getStartDate() != null && agreement.getEndDate() != null) {
@@ -105,25 +88,8 @@ public class AgreementService {
             agreement.setDocumentPath(agreementDetails.getDocumentPath());
             agreement.setPriority(agreementDetails.getPriority());
             
-            // Update branch if provided
-            if (agreementDetails.getBranch() != null && agreementDetails.getBranch().getId() != null) {
-                Optional<Branch> branch = branchRepository.findById(agreementDetails.getBranch().getId());
-                if (branch.isPresent()) {
-                    agreement.setBranch(branch.get());
-                } else {
-                    throw new RuntimeException("Branch not found with id: " + agreementDetails.getBranch().getId());
-                }
-            }
-            
-            // Update assigned manager if provided
-            if (agreementDetails.getAssignedManager() != null && agreementDetails.getAssignedManager().getId() != null) {
-                Optional<User> manager = userRepository.findById(agreementDetails.getAssignedManager().getId());
-                if (manager.isPresent()) {
-                    agreement.setAssignedManager(manager.get());
-                } else {
-                    throw new RuntimeException("Manager not found with id: " + agreementDetails.getAssignedManager().getId());
-                }
-            }
+            // Set branch to null since we removed branch selection from frontend
+            agreement.setBranch(null);
             
             // Recalculate duration if dates changed
             if (agreement.getStartDate() != null && agreement.getEndDate() != null) {
@@ -164,10 +130,6 @@ public class AgreementService {
 
     public List<Agreement> getActiveAgreements() {
         return agreementRepository.findByIsActiveOrderByCreatedAtDesc(true);
-    }
-
-    public List<Agreement> getAgreementsByManager(Long managerId) {
-        return agreementRepository.findByAssignedManagerIdOrderByCreatedAtDesc(managerId);
     }
 
     public List<Agreement> getExpiringAgreements(int daysAhead) {
